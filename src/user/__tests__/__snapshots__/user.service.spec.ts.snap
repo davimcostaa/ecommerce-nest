@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserService should return error if user exists 1`] = `"email registered in system"`;
+
+exports[`UserService should return error in findUserByEmail (error request) 1`] = `""`;
+
+exports[`UserService should return error in findUserByEmail 1`] = `"Email not found!"`;
+
+exports[`UserService should return error in findUserById 1`] = `"UserId not found!"`;
