@@ -1,6 +1,6 @@
 import { Controller, Get, UsePipes, ValidationPipe, Post, Body } from '@nestjs/common';
-import { Roles } from 'src/decorators/roles.decorator';
-import { UserType } from 'src/user/enum/userType.enum';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from '../user/enum/userType.enum';
 import { CategoryService } from './category.service';
 import { createCategory } from './dtos/create-category.dto';
 import { ReturnCategory } from './dtos/return-category.dto';
@@ -21,7 +21,7 @@ export class CategoryController {
         .map((category) => new ReturnCategory(category))
     }
 
-    @Roles(UserType.Admin, UserType.User)
+    @Roles(UserType.Admin)
     @UsePipes(ValidationPipe)
     @Post()
     async createCategory(
