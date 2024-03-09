@@ -9,6 +9,7 @@ import { AddressService } from '../address.service';
 import { AddressEntity } from '../entities/address.entity';
 import { addressMock } from '../__mocks__/address.mock';
 import { createAddressMock } from '../__mocks__/create-address.mock';
+import { NotFoundException } from '@nestjs/common';
 
 
 describe('AddressService', () => {
@@ -37,7 +38,8 @@ describe('AddressService', () => {
           provide: getRepositoryToken(AddressEntity),
           useValue: {
             findOne: jest.fn().mockResolvedValue(addressMock),
-            save: jest.fn().mockResolvedValue({})
+            save: jest.fn().mockResolvedValue({}),
+            find: jest.fn().mockResolvedValue(addressMock)
           } 
         },
       ],
@@ -86,5 +88,17 @@ describe('AddressService', () => {
         )).rejects.toThrow()
 
   });
+
+  it('should return all users address', async () => {
+    const addresses = await service.findAddressByUserId(userEntityMock.id);
+
+    expect(addresses).toEqual(addressMock);
+  });
+
+  it('should return not found if there is no address registered', async () => {
+    jest.spyOn(addressRepository, 'find').mockResolvedValue([]); // Mock to return an empty array
+
+    await expect(service.findAddressByUserId(userEntityMock.id)).rejects.toThrow(NotFoundException);
+});
 
 });
