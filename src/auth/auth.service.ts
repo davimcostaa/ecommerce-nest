@@ -15,21 +15,20 @@ export class AuthService {
         private readonly userService: UserService,
         private jwtService: JwtService
         ){}
-
-    async login(loginDTO: LoginDTO): Promise<ReturnLogin> {
-        const user: UserEntity | undefined = await this.userService.findUserByEmail(loginDTO.email)
-        .catch(() => undefined);
+        async login(loginDto: LoginDTO): Promise<ReturnLogin> {
+            const user: UserEntity | undefined = await this.userService
+              .findUserByEmail(loginDto.email)
+              .catch(() => undefined);
         
-        const isMatch = compare(loginDTO.password, user?.password || '');
-
-        if (!user || !isMatch) {
-            throw new NotFoundException('Email or password invalid')
-        }
-
-        return {
-            accessToken: await this.jwtService.signAsync({...new LoginPayload(user)}),
-            user: new ReturnUserDTO(user)
-        }
-
-    }
+            const isMatch = await compare(loginDto.password, user?.password || '');
+        
+            if (!user || !isMatch) {
+              throw new NotFoundException('Email or passord invalid');
+            }
+        
+            return {
+              accessToken: this.jwtService.sign({ ...new LoginPayload(user) }),
+              user: new ReturnUserDTO(user),
+            };
+          }
 }
