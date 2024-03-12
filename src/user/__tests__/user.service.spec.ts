@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { UserService } from '../user.service';
 import { createUserMock } from '../__mocks__/createUser.mock';
+import { updatePasswordInvalidUserMock, updatePasswordUserMock } from '../__mocks__/updateUserPassword.mock';
 import {  userEntityMock } from '../__mocks__/user.mock';
 
 describe('UserService', () => {
@@ -81,6 +82,25 @@ describe('UserService', () => {
 
     expect(user).toEqual(userEntityMock)
 
+  });
+
+
+  it('should return user in update password', async () => {
+    const user = await service.updatePasswordUser(updatePasswordUserMock, userEntityMock.id);
+
+    expect(user).toEqual(userEntityMock)
+  });
+
+  it('should return invalid password', async () => {
+
+    expect(service.updatePasswordUser(updatePasswordInvalidUserMock, userEntityMock.id)).rejects.toThrow()
+  });
+
+  it('should return error if the user doesnt exists', async () => {
+
+    jest.spyOn(userRepository, 'findOne').mockResolvedValue(null)
+
+    expect(service.updatePasswordUser(updatePasswordUserMock, userEntityMock.id)).rejects.toThrow()
   });
 
 });

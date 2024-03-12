@@ -13,7 +13,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserService } from './user/user.service';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
-import { ControllerService } from './controller/controller.service';
 
 @Module({
   imports: [
@@ -44,6 +43,6 @@ import { ControllerService } from './controller/controller.service';
   providers: [{
     provide: APP_GUARD,
     useClass: RolesGuard,
-  }, ControllerService],
+  }],
 })
 export class AppModule {}
